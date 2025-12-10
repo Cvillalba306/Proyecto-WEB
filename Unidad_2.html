@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Unidad de Aprendizaje II</title>
+
+    <style>
+        /* ==========================
+   RESET & BASE
+   ========================== */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0
+        }
+
+        html {
+            scroll-behavior: smooth
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #000;
+            color: #fff;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            overflow-x: hidden;
+        }
+
+        /* ==========================
+   BACKGROUND 3D (MISMO FONDO)
+   ========================== */
+        .background-3d {
+            position: fixed;
+            inset: 0;
+            background: url('imagenes/fondo PI.jpg') center/cover no-repeat;
+            transform: translateZ(-50px) scale(1.25);
+            opacity: .48;
+            z-index: -3;
+            will-change: transform;
+            pointer-events: none;
+            transition: transform .12s linear;
+        }
+
+        /* ==========================
+   PARTICLES CANVAS (MORADO)
+   ========================== */
+        #particles {
+            position: fixed;
+            inset: 0;
+            z-index: -2;
+            pointer-events: none;
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* ==========================
+   CURSOR PREMIUM - NUEVO DISEÑO
+   - dot: punto central rápido
+   - halo: glow instant + pulso ligero
+   - trail: light tail (simple, low cost)
+   ========================== */
+        .cursor-dot {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ffd6ff, #b36bff);
+            box-shadow: 0 0 14px rgba(179, 107, 255, 0.95), 0 0 30px rgba(179, 107, 255, 0.22);
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            z-index: 9999;
+            will-change: transform;
+        }
+
+        .cursor-halo {
+            position: fixed;
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(179, 107, 255, 0.18), rgba(179, 107, 255, 0.04));
+            box-shadow: 0 0 40px rgba(179, 107, 255, 0.45), inset 0 0 12px rgba(255, 255, 255, 0.02);
+            transform: translate(-50%, -50%) scale(1);
+            pointer-events: none;
+            z-index: 9998;
+            will-change: transform, opacity;
+            transition: transform .09s linear, opacity .12s linear;
+        }
+
+        /* small pulse when hovering interactive elements */
+        .cursor-halo.pulse {
+            transform: translate(-50%, -50%) scale(1.12);
+            opacity: 1;
+        }
+
+        /* ==========================
+   LAYOUT / CARD (GLASS 3D)
+   ========================== */
+        .container {
+            width: 90%;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 110px 0;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(12px) saturate(120%);
+            padding: 36px;
+            border-radius: 18px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.55), inset 0 0 18px rgba(255, 255, 255, 0.02);
+            transform: perspective(900px) translateZ(18px);
+            transition: transform .28s ease;
+        }
+
+        /* title styles */
+        h1 {
+            font-size: 2.8rem;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+            color: #f7ecff;
+            text-shadow: 0 0 16px rgba(179, 107, 255, 0.14)
+        }
+
+        h2 {
+            font-size: 1.6rem;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            color: #f0e8ff
+        }
+
+        p,
+        li {
+            font-size: 1.05rem;
+            line-height: 1.6;
+            opacity: .95
+        }
+
+        /* premium button */
+        .btn-premium {
+            display: inline-block;
+            margin-top: 22px;
+            padding: 12px 28px;
+            border-radius: 14px;
+            background: linear-gradient(180deg, rgba(120, 60, 200, 0.16), rgba(90, 40, 170, 0.18));
+            border: 1px solid rgba(170, 120, 255, 0.35);
+            color: #fff;
+            font-weight: 700;
+            text-decoration: none;
+            box-shadow: 0 6px 26px rgba(120, 60, 200, 0.25), inset 0 0 10px rgba(255, 255, 255, 0.03);
+            transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
+        }
+
+        .btn-premium:hover {
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 12px 48px rgba(153, 102, 255, 0.35), inset 0 0 18px rgba(255, 255, 255, 0.04);
+            background: linear-gradient(180deg, rgba(150, 90, 230, 0.28), rgba(95, 44, 185, 0.28));
+        }
+
+        /* responsive */
+        @media(max-width:720px) {
+            h1 {
+                font-size: 2rem
+            }
+
+            .container {
+                padding: 70px 16px
+            }
+
+            .card {
+                padding: 20px
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- BACKGROUND -->
+    <div class="background-3d" aria-hidden="true"></div>
+
+    <!-- CURSOR ELEMENTS -->
+    <div class="cursor-halo" id="cursorHalo" aria-hidden="true"></div>
+    <div class="cursor-dot" id="cursorDot" aria-hidden="true"></div>
+
+    <!-- PARTICLES CANVAS -->
+    <canvas id="particles"></canvas>
+
+    <!-- CONTENT -->
+    <main class="container" id="mainContent">
+        <article class="card" role="main" aria-labelledby="title">
+            <h1 id="title">Unidad de Aprendizaje II</h1>
+
+            <h2>Título</h2>
+            <p>Breve introducción sobre la unidad II: describe en 3-4 líneas la intención principal y los temas que se
+                abordarán.</p>
+
+            <h2>Reflexión</h2>
+            <p>Espacio para una reflexión significativa sobre lo aprendido en esta unidad.</p>
+
+            <h2>Actividades realizadas</h2>
+            <ul>
+                <li>Actividad 1 — descripción breve.</li>
+                <li>Actividad 2 — descripción breve.</li>
+                <li>Actividad 3 — descripción breve.</li>
+            </ul>
+
+            <a class="btn-premium" href="Inicio.Html">⬅ Volver al Inicio</a>
+        </article>
+    </main>
+
+    <script>
+        /* ==========================
+           RENDERSIZE / RETINA SCALE
+           ========================== */
+        const canvas = document.getElementById('particles');
+        const ctx = canvas.getContext('2d');
+        function resizeCanvas() {
+            const dpr = Math.max(1, window.devicePixelRatio || 1);
+            canvas.width = innerWidth * dpr;
+            canvas.height = innerHeight * dpr;
+            canvas.style.width = innerWidth + 'px';
+            canvas.style.height = innerHeight + 'px';
+            ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        }
+        window.addEventListener('resize', resizeCanvas, { passive: true });
+        resizeCanvas();
+
+        /* ==========================
+           PARTICLES SYSTEM (PURPLE)
+           Lightweight, optimized
+           ========================== */
+        const PARTICLE_COUNT = Math.min(140, Math.floor((innerWidth * innerHeight) / 60000)); // adaptive
+        let particles = [];
+
+        function rand(min, max) { return Math.random() * (max - min) + min }
+
+        function createParticles() {
+            particles = [];
+            for (let i = 0; i < PARTICLE_COUNT; i++) {
+                particles.push({
+                    x: rand(0, innerWidth),
+                    y: rand(0, innerHeight),
+                    r: rand(0.7, 1.8),
+                    vx: rand(-0.25, 0.25),
+                    vy: rand(-0.25, 0.25),
+                    hue: rand(270, 290), // purple hue range
+                    life: rand(60, 220),
+                    t: 0
+                });
+            }
+        }
+        createParticles();
+
+        let mouse = { x: innerWidth / 2, y: innerHeight / 2, active: false };
+
+        /* mouse move lightweight */
+        window.addEventListener('mousemove', (e) => {
+            mouse.x = e.clientX;
+            mouse.y = e.clientY;
+            mouse.active = true;
+        }, { passive: true });
+
+        window.addEventListener('mouseleave', () => { mouse.active = false; }, { passive: true });
+
+        /* simple distance-based gentle attraction to cursor (performant) */
+        function updateParticles() {
+            for (let p of particles) {
+                // subtle autonomous motion
+                p.x += p.vx;
+                p.y += p.vy;
+                // bounce edges
+                if (p.x < -10) p.x = innerWidth + 10;
+                if (p.x > innerWidth + 10) p.x = -10;
+                if (p.y < -10) p.y = innerHeight + 10;
+                if (p.y > innerHeight + 10) p.y = -10;
+
+                // interact with mouse (gentle)
+                if (mouse.active) {
+                    const dx = mouse.x - p.x;
+                    const dy = mouse.y - p.y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+                    const influence = Math.max(0, 80 - dist); // only close particles feel it
+                    if (influence > 0) {
+                        const force = (influence / 80) * 0.6;
+                        p.vx += (dx / dist || 0) * force * 0.02;
+                        p.vy += (dy / dist || 0) * force * 0.02;
+                    }
+                }
+
+                // decay velocities slightly
+                p.vx *= 0.995;
+                p.vy *= 0.995;
+
+                // lifetime wobble
+                p.t++;
+                if (p.t > p.life) {
+                    // respawn at random with similar values
+                    p.x = rand(0, innerWidth);
+                    p.y = rand(0, innerHeight);
+                    p.vx = rand(-0.25, 0.25);
+                    p.vy = rand(-0.25, 0.25);
+                    p.t = 0;
+                    p.life = rand(60, 220);
+                }
+            }
+        }
+
+        /* draw purple particles */
+        function drawParticles() {
+            ctx.clearRect(0, 0, innerWidth, innerHeight);
+            for (let p of particles) {
+                const alpha = 0.18 + 0.45 * Math.abs(Math.sin((p.t / p.life) * Math.PI)); // soft breathing
+                ctx.beginPath();
+                ctx.fillStyle = `hsla(${p.hue},85%,60%,${alpha})`;
+                ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        /* lightweight loop */
+        let raf = null;
+        function loop() {
+            updateParticles();
+            drawParticles();
+            raf = requestAnimationFrame(loop);
+        }
+        loop();
+
+        /* ==========================
+           CURSOR: SMOOTH FOLLOW + GLow logic
+           Using lerp for fluidity (fast)
+           ========================== */
+        const halo = document.getElementById('cursorHalo');
+        const dot = document.getElementById('cursorDot');
+
+        let hx = innerWidth / 2, hy = innerHeight / 2;
+        let dx = innerWidth / 2, dy = innerHeight / 2;
+
+        function lerp(a, b, n) { return (1 - n) * a + n * b }
+
+        const FOLLOW_SPEED = 0.22; // halo follow speed (increase -> more instant)
+        const DOT_SPEED = 0.6;     // dot follow speed (faster)
+
+        window.addEventListener('mousemove', e => {
+            // immediate target
+            tx = e.clientX;
+            ty = e.clientY;
+            // small halo pulse when over interactive elements
+            const el = document.elementFromPoint(e.clientX, e.clientY);
+            if (el && (el.tagName === 'A' || el.tagName === 'BUTTON' || el.classList.contains('btn-premium'))) {
+                halo.classList.add('pulse');
+            } else {
+                halo.classList.remove('pulse');
+            }
+        });
+
+        let tx = innerWidth / 2, ty = innerHeight / 2;
+        window.addEventListener('mousemove', e => {
+            tx = e.clientX; ty = e.clientY;
+        }, { passive: true });
+
+        function cursorRAF() {
+            // halo (slower, gives subtle lag)
+            hx = lerp(hx, tx, FOLLOW_SPEED);
+            hy = lerp(hy, ty, FOLLOW_SPEED);
+            halo.style.left = hx + 'px';
+            halo.style.top = hy + 'px';
+
+            // dot (more immediate)
+            dx = lerp(dx, tx, DOT_SPEED);
+            dy = lerp(dy, ty, DOT_SPEED);
+            dot.style.left = dx + 'px';
+            dot.style.top = dy + 'px';
+
+            requestAnimationFrame(cursorRAF);
+        }
+        cursorRAF();
+
+        /* enhance performance on resize */
+        window.addEventListener('resize', () => {
+            resizeCanvas();
+            createParticles();
+        }, { passive: true });
+
+        /* ==========================
+           PARALLAX FOR BACKGROUND (subtle)
+           ========================== */
+        document.addEventListener('mousemove', (e) => {
+            const bg = document.querySelector('.background-3d');
+            let x = (e.clientX / window.innerWidth - 0.5) * 8; // subtle
+            let y = (e.clientY / window.innerHeight - 0.5) * 6;
+            bg.style.transform = `translateZ(-50px) scale(1.25) translate(${x}px, ${y}px)`;
+        }, { passive: true });
+
+        /* ==========================
+           CLEANUP on page hide (good for single page apps)
+           ========================== */
+        window.addEventListener('pagehide', () => {
+            cancelAnimationFrame(raf);
+        });
+    </script>
+</body>
+
+</html>

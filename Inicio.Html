@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Proyecto Integrador - Daniel</title>
+
+    <!-- APARTADO 2: CSS externo (NO TOCAR) -->
+    <link rel="stylesheet" href="Css/Apartado2.css">
+
+    <style>
+        /* ===== Reset y base ===== */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0
+        }
+
+        html,
+        body {
+            height: 100%;
+            width: 100%;
+            background: #070709;
+            color: #fff;
+            font-family: Inter, Arial, sans-serif;
+            overflow-x: hidden;
+            scroll-behavior: smooth
+        }
+
+        /* ===== HERO / GLASS (APARTADO 1) ===== */
+        .hero {
+            position: relative;
+            height: 100vh;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            background: url('imagenes/fondo PI.jpg') center/cover no-repeat fixed;
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+
+        .hero .overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(2, 6, 12, 0.45);
+            backdrop-filter: blur(6px);
+            pointer-events: none;
+            transition: filter .25s ease, opacity .25s ease;
+        }
+
+        /* Glass-box mejorado (templado) */
+        .glass-box {
+            position: relative;
+            z-index: 5;
+            min-width: 280px;
+            max-width: 880px;
+            padding: 34px 44px;
+            border-radius: 20px;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.03));
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(14px) saturate(120%);
+            box-shadow:
+                0 10px 30px rgba(0, 0, 0, 0.5),
+                0 2px 6px rgba(0, 0, 0, 0.35),
+                inset 0 1px 0 rgba(255, 255, 255, 0.02);
+            transform-style: preserve-3d;
+            will-change: transform, box-shadow, filter;
+            transition: transform .18s cubic-bezier(.2, .9, .25, 1), box-shadow .25s ease;
+        }
+
+        .glass-box h1 {
+            font-size: clamp(28px, 4.6vw, 48px);
+            line-height: 1.02;
+            margin-bottom: 8px;
+            text-shadow: 0 6px 24px rgba(14, 200, 255, 0.08), 0 0 12px rgba(14, 200, 255, 0.05);
+            color: #e9f7ff;
+        }
+
+        .glass-box p {
+            font-size: clamp(14px, 1.1vw, 18px);
+            opacity: .9;
+            margin-bottom: 18px;
+            color: #dfefff;
+        }
+
+        .glass-cta {
+            display: inline-block;
+            padding: 12px 26px;
+            border-radius: 999px;
+            background: linear-gradient(90deg, #00d5ff, #4cbaff);
+            color: #021018;
+            font-weight: 700;
+            box-shadow: 0 10px 32px rgba(12, 170, 240, 0.12);
+            transform: translateZ(30px);
+            transition: transform .12s ease, box-shadow .18s ease;
+            text-decoration: none;
+        }
+
+        .glass-cta:hover {
+            transform: translateZ(36px) scale(1.02);
+            box-shadow: 0 18px 42px rgba(12, 170, 240, 0.18)
+        }
+
+        /* ===== Cursor PRO (ultra-fluid) ===== */
+        #cursor-dot,
+        #cursor-ring {
+            position: fixed;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 99999;
+            transform: translate(-50%, -50%);
+        }
+
+        #cursor-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #22d3ee;
+            box-shadow: 0 0 10px #22d3ee88;
+            transition: none;
+            will-change: transform;
+        }
+
+        #cursor-ring {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: 2px solid rgba(34, 211, 238, 0.9);
+            box-shadow: 0 8px 30px rgba(34, 211, 238, 0.08);
+            transition: none;
+            will-change: transform;
+        }
+
+        /* Si prefieres que desaparezca en móvil */
+        @media (max-width:720px) {
+
+            #cursor-ring,
+            #cursor-dot {
+                display: none
+            }
+
+            .glass-box {
+                padding: 22px 18px;
+                border-radius: 14px
+            }
+
+            .hero {
+                background-attachment: scroll
+            }
+        }
+
+        /* ===== Canvas partículas (sigue mouse) ===== */
+        canvas#particles {
+            position: absolute;
+            inset: 0;
+            z-index: 4;
+            pointer-events: none;
+            display: block
+        }
+
+        /* ===== Fog dinámico (sutil) ===== */
+        .fog {
+            position: absolute;
+            inset: -10%;
+            z-index: 3;
+            background: url('https://i.imgur.com/8IuucQZ.png') repeat;
+            opacity: 0.18;
+            filter: blur(60px);
+            transform: translateZ(-200px) scale(1.25);
+            pointer-events: none;
+        }
+
+        /* ===== Small responsive tweaks ===== */
+        @media (max-width:900px) {
+            .glass-box {
+                padding: 22px 20px
+            }
+
+            .glass-box h1 {
+                font-size: clamp(20px, 6.4vw, 34px)
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Cursor elements -->
+    <div id="cursor-dot" aria-hidden="true"></div>
+    <div id="cursor-ring" aria-hidden="true"></div>
+
+    <!-- Apartado 1 (hero) -->
+    <section class="hero" id="hero">
+        <div class="fog" aria-hidden="true"></div>
+        <canvas id="particles" aria-hidden="true"></canvas>
+        <div class="overlay" aria-hidden="true"></div>
+
+        <div class="glass-box" id="glassBox" role="region" aria-label="Hero content">
+            <h1>Daniel Odilón Gregorio</h1>
+            <p>Proyecto Integrador</p>
+            <p>Escuela Normal de Especialización "Dr. Roberto Solís Quiroga"</p>
+            <p>TECNOLOGÍAS DIGITALES PARA EL APRENDIZAJE</p>
+            <p>Guillermina Gutierrez Resendiz</p>
+            <a class="glass-cta" href="#conocer-mas">Conocer más</a>
+        </div>
+    </section>
+
+    <!-- APARTADO 2 -->
+    <section id="conocer-mas" class="seccion apartados">
+        <video class="video-fondo" autoplay muted loop playsinline>
+            <source src="Imagenes/Fondo G.mp4" type="video/mp4">
+        </video>
+
+        <div class="conocer-texto">
+            <div class="conocer-fondo">
+                <h2>Conocer más</h2>
+                <p>Bienvenido a la sección de Conocer Más Aquí Encontraras La Información De Cada Unidad</p>
+            </div>
+        </div>
+
+        <div class="sistema-orbital">
+            <a href="Proycto_Integrador.html" class="central-item">Proyecto<br>Integrador</a>
+
+            <div class="orbit">
+                <a href="unidad_1.html" class="orbit-item">Unidad I</a>
+                <a href="unidad_2.html" class="orbit-item">Unidad II</a>
+                <a href="unidad_3.html" class="orbit-item">Unidad III</a>
+                <a href="Conócenos.html" class="orbit-item">Conócenos</a>
+
+            </div>
+        </div>
+    </section>
+
+    <script>
+        /* ============================
+           Código JS optimizado y comentado
+           - Cursor ultra-reactivo (dot = instant; ring = very fast lerp)
+           - Partículas ligeras que siguen mouse + reaccionan al scroll (ráfagas)
+           - Parallax / tilt del glass-box
+           - Optimizado para evitar lag: cap particles, use rAF, resize handler
+           =============================*/
+
+        // ---- cursor ----
+        const dot = document.getElementById('cursor-dot');
+        const ring = document.getElementById('cursor-ring');
+
+        let mx = window.innerWidth / 2, my = window.innerHeight / 2;   // mouse target
+        let rx = mx, ry = my; // ring position (smoothed)
+        const ringLerp = 0.72; // HIGH: more real-time feel (0.7-0.85 recommended)
+
+        // dot will be positioned instantly (no lerp)
+        window.addEventListener('pointermove', (e) => {
+            mx = e.clientX; my = e.clientY;
+            dot.style.left = mx + 'px';
+            dot.style.top = my + 'px';
+        }, { passive: true });
+
+        function animateRing() {
+            // fast lerp for near-instant feel but still smooth
+            rx += (mx - rx) * ringLerp;
+            ry += (my - ry) * ringLerp;
+            ring.style.left = rx + 'px';
+            ring.style.top = ry + 'px';
+            requestAnimationFrame(animateRing);
+        }
+        animateRing();
+
+        // ---- particles canvas ----
+        const canvas = document.getElementById('particles');
+        const ctx = canvas.getContext('2d', { alpha: true });
+        let W = window.innerWidth, H = window.innerHeight;
+        canvas.width = W; canvas.height = H;
+
+        // particle pool (small, optimized)
+        const MAX = 60;
+        const particles = new Array(MAX).fill().map(() => createParticle(true));
+
+        function createParticle(randInit = false) {
+            return {
+                x: Math.random() * W,
+                y: Math.random() * H,
+                vx: (Math.random() - 0.5) * 0.6,
+                vy: (Math.random() - 0.5) * 0.6,
+                r: 1 + Math.random() * 2,
+                life: 0,
+                maxLife: 80 + Math.random() * 160,
+                trail: []
+            };
+        }
+
+        // called on pointer move to "attract" particles to mouse
+        let lastMoveTime = performance.now();
+        window.addEventListener('pointermove', (e) => {
+            // spawn subtle microburst on movement (cheap)
+            microBurst(e.clientX, e.clientY, 2);
+            lastMoveTime = performance.now();
+        }, { passive: true });
+
+        // micro bursts (cheap): n particles get velocity toward random direction from pointer
+        function microBurst(x, y, n) {
+            for (let i = 0; i < n; i++) {
+                const p = particles[(Math.random() * particles.length) | 0];
+                p.x = x + (Math.random() - 0.5) * 6;
+                p.y = y + (Math.random() - 0.5) * 6;
+                const angle = Math.random() * Math.PI * 2;
+                const speed = 1.2 + Math.random() * 1.2;
+                p.vx = Math.cos(angle) * speed;
+                p.vy = Math.sin(angle) * speed;
+                p.life = 0;
+                p.maxLife = 40 + Math.random() * 140;
+            }
+        }
+
+        // scroll reaction: add a bigger burst (but throttled)
+        let lastScroll = 0;
+        window.addEventListener('scroll', (e) => {
+            const now = performance.now();
+            if (now - lastScroll < 120) return; // throttle
+            lastScroll = now;
+            const x = mx, y = my;
+            microBurst(x, y, 8);
+        }, { passive: true });
+
+        // animate particles
+        function updateParticles() {
+            ctx.clearRect(0, 0, W, H);
+
+            for (let i = 0; i < particles.length; i++) {
+                const p = particles[i];
+
+                // subtle attraction to mouse position for soft following
+                const ax = (mx - p.x) * 0.0025; // very small acceleration
+                const ay = (my - p.y) * 0.0025;
+                p.vx += ax; p.vy += ay;
+
+                // apply velocity and friction
+                p.x += p.vx;
+                p.y += p.vy;
+                p.vx *= 0.98; p.vy *= 0.98;
+
+                // life decay, respawn if necessary
+                p.life++;
+                if (p.life > p.maxLife || p.x < -50 || p.x > W + 50 || p.y < -50 || p.y > H + 50) {
+                    Object.assign(p, createParticle());
+                    p.x = Math.random() * W; p.y = Math.random() * H;
+                }
+
+                // trail effect (lightweight): draw small rectangles with decreasing alpha
+                const trailLen = 6;
+                for (let t = 0; t < trailLen; t++) {
+                    const tx = p.x - p.vx * t * 1.8;
+                    const ty = p.y - p.vy * t * 1.8;
+                    const alpha = Math.max(0, 0.18 * (1 - (t / trailLen)));
+                    ctx.fillStyle = `rgba(34,211,238,${alpha})`;
+                    ctx.fillRect(tx, ty, p.r, p.r);
+                }
+
+                // main dot
+                ctx.beginPath();
+                ctx.fillStyle = 'rgba(34,211,238,0.9)';
+                ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+                ctx.fill();
+            }
+            requestAnimationFrame(updateParticles);
+        }
+        updateParticles();
+
+        // handle resize
+        let resizeTO;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTO);
+            resizeTO = setTimeout(() => {
+                W = innerWidth; H = innerHeight;
+                canvas.width = W; canvas.height = H;
+            }, 120);
+        });
+
+        // ---- Parallax / tilt for glass-box ----
+        const box = document.getElementById('glassBox');
+        const hero = document.getElementById('hero');
+        let px = 0, py = 0;
+        window.addEventListener('pointermove', (e) => {
+            // normalized coords -0.5..0.5
+            const nx = (e.clientX / innerWidth) - 0.5;
+            const ny = (e.clientY / innerHeight) - 0.5;
+
+            // parallax background (subtle) -> transform the hero background via CSS transform (GPU)
+            hero.style.transform = `translateZ(0) translateX(${nx * 8}px) translateY(${ny * 8}px) scale(1.01)`;
+
+            // tilt for card
+            const rotY = nx * 6; // degrees
+            const rotX = -ny * 6;
+            box.style.transform = `rotateX(${rotX}deg) rotateY(${rotY}deg) translateZ(30px)`;
+            // change box shadow depth based on distance
+            const depth = Math.max(8, Math.abs(nx) * 28 + Math.abs(ny) * 28);
+            box.style.boxShadow = `0 ${depth}px ${Math.max(30, depth * 1.6)}px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.02)`;
+        }, { passive: true });
+
+        // Restore subtle idle transform when mouse leaves hero
+        hero.addEventListener('pointerleave', () => {
+            box.style.transform = 'translateZ(0)';
+            hero.style.transform = 'none';
+            box.style.boxShadow = '0 10px 30px rgba(0,0,0,0.5), 0 2px 6px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.02)';
+        });
+
+        // Accessibility: respect reduced-motion
+        const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+        if (mq.matches) {
+            // reduce motion: disable particle animation and tilt
+            canvas.style.display = 'none';
+            box.style.transform = 'none';
+            ring.style.display = 'none';
+            dot.style.display = 'none';
+        }
+
+        // end of script
+    </script>
+</body>
+
+</html>

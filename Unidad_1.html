@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Unidad 1</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #000;
+            overflow-x: hidden;
+            color: #fff;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* ======= CURSOR PREMIUM ROJO ======= */
+        .cursor-ring {
+            position: fixed;
+            width: 45px;
+            height: 45px;
+            border: 2px solid #ff4b4b;
+            border-radius: 50%;
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 20px rgba(255, 70, 70, 0.9);
+            transition: transform 0.03s linear;
+            z-index: 9999;
+        }
+
+        .cursor-dot {
+            position: fixed;
+            width: 12px;
+            height: 12px;
+            background: #ff2a2a;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            box-shadow: 0 0 25px rgba(255, 0, 0, 0.9);
+            z-index: 10000;
+        }
+
+        /* ==== FONDO 3D PARALLAX ==== */
+        .background-3d {
+            position: fixed;
+            inset: 0;
+            background: url('imagenes/fondo PI.jpg') center/cover;
+            transform-style: preserve-3d;
+            transform: translateZ(-50px) scale(1.25);
+            opacity: 0.45;
+            z-index: -2;
+        }
+
+        /* ==== PARTICULAS ROJAS ==== */
+        #particles {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* ==== CONTENIDO ==== */
+        .contenido {
+            width: 90%;
+            max-width: 1000px;
+            margin: auto;
+            padding: 120px 0;
+        }
+
+        /* ==== TARJETA GLASS 3D ==== */
+        .card {
+            background: rgba(255, 255, 255, 0.13);
+            border: 1px solid rgba(255, 255, 255, 0.28);
+            backdrop-filter: blur(14px);
+            padding: 40px;
+            border-radius: 22px;
+            box-shadow: 0 0 30px rgba(255, 0, 0, 0.4);
+            animation: fadeIn 1.5s ease;
+            transform: perspective(900px) translateZ(25px);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            letter-spacing: 2px;
+            text-shadow: 0 0 15px #ff4b4b;
+        }
+
+        h2 {
+            font-size: 2rem;
+            margin-top: 35px;
+            margin-bottom: 10px;
+            text-shadow: 0 0 10px #ff4b4b;
+        }
+
+        p,
+        li {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            line-height: 1.6;
+        }
+
+        ul {
+            margin-left: 25px;
+        }
+
+        /* ======= BOTÓN PREMIUM 3D GLASS ======= */
+        .btn-premium {
+            margin-top: 30px;
+            display: inline-block;
+            padding: 15px 28px;
+            font-size: 1.2rem;
+            color: #ffdfdf;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 16px;
+            background: rgba(255, 80, 80, 0.25);
+            border: 2px solid rgba(255, 110, 110, 0.6);
+            backdrop-filter: blur(12px);
+            box-shadow:
+                0 0 25px rgba(255, 110, 110, 0.55),
+                inset 0 0 12px rgba(255, 110, 110, 0.45);
+            transition: 0.3s ease;
+        }
+
+        .btn-premium:hover {
+            background: rgba(255, 110, 110, 0.35);
+            box-shadow:
+                0 0 40px rgba(255, 100, 100, 0.7),
+                inset 0 0 18px rgba(255, 120, 120, 0.6);
+            transform: translateY(-3px) scale(1.03);
+        }
+
+        @media(max-width:600px) {
+            h1 {
+                font-size: 2.3rem;
+            }
+
+            h2 {
+                font-size: 1.6rem;
+            }
+
+            p,
+            li {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Cursor -->
+    <div class="cursor-ring"></div>
+    <div class="cursor-dot"></div>
+
+    <!-- Fondo 3D -->
+    <div class="background-3d"></div>
+
+    <!-- Partículas -->
+    <canvas id="particles"></canvas>
+
+    <!-- CONTENIDO -->
+    <div class="contenido">
+        <div class="card">
+
+            <h1>Unidad de Aprendizaje I</h1>
+
+            <h2>Título</h2>
+            <p>Pendiente...</p>
+
+            <h2>Introducción</h2>
+            <p>Pendiente...</p>
+
+            <h2>Actividades Realizadas</h2>
+            <ul>
+                <li>Actividad 1</li>
+                <li>Actividad 2</li>
+                <li>Actividad 3</li>
+            </ul>
+
+            <!-- 🔥 BOTÓN PREMIUM REGRESAR AL INICIO -->
+            <a class="btn-premium" href="Inicio.html">⬅ Volver al Inicio</a>
+
+        </div>
+    </div>
+
+    <!-- Cursor Script -->
+    <script>
+        const ring = document.querySelector('.cursor-ring');
+        const dot = document.querySelector('.cursor-dot');
+
+        window.addEventListener('mousemove', (e) => {
+            dot.style.left = e.clientX + "px";
+            dot.style.top = e.clientY + "px";
+
+            ring.style.transform = `translate(${e.clientX - 20}px, ${e.clientY - 20}px)`;
+        });
+    </script>
+
+    <!-- Partículas -->
+    <script>
+        const canvas = document.getElementById("particles");
+        const ctx = canvas.getContext("2d");
+
+        canvas.width = innerWidth;
+        canvas.height = innerHeight;
+
+        const particles = [];
+        for (let i = 0; i < 90; i++) {
+            particles.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                r: Math.random() * 2 + 1,
+                vx: (Math.random() - 0.5) * 1,
+                vy: (Math.random() - 0.5) * 1
+            });
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            particles.forEach(p => {
+                p.x += p.vx;
+                p.y += p.vy;
+
+                if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
+                if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+                ctx.fillStyle = "rgba(255,80,80,0.6)";
+                ctx.fill();
+            });
+
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+    </script>
+
+    <!-- Parallax 3D -->
+    <script>
+        document.addEventListener("mousemove", e => {
+            const bg = document.querySelector(".background-3d");
+            let x = (e.clientX / window.innerWidth - 0.5) * 10;
+            let y = (e.clientY / window.innerHeight - 0.5) * 10;
+            bg.style.transform = `translateZ(-50px) scale(1.25) translate(${x}px,${y}px)`;
+        });
+    </script>
+
+</body>
+
+</html>

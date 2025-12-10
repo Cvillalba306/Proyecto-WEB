@@ -1,0 +1,624 @@
+/* ------------------------------------
+RESETEO GENERAL
+------------------------------------ */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: #020202;
+    font-family: Arial, sans-serif;
+    overflow-x: hidden;
+}
+
+/* ------------------------------------
+SECCIÓN CONOCER MÁS
+------------------------------------ */
+#conocer-mas {
+    position: relative;
+    width: 100%;
+    height: 160vh;
+    padding-top: 120px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* VIDEO */
+.video-fondo {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: .75;
+    z-index: 0 !important;
+    pointer-events: none;
+    /* 🔧 FIX para permitir reproducción */
+}
+
+/* ------------------------------------
+TEXTO SUPERIOR "CONOCER MÁS"
+------------------------------------ */
+.conocer-texto {
+    position: relative;
+    z-index: 20;
+    margin-bottom: 40px;
+}
+
+.conocer-fondo {
+    background: rgba(174, 174, 174, 0.137);
+    padding: 22px 30px;
+    color: #fff;
+    border-radius: 15px;
+    max-width: 600px;
+    backdrop-filter: blur(5px);
+}
+
+/* ------------------------------------
+SISTEMA ORBITAL
+------------------------------------ */
+.sistema-orbital {
+    position: relative;
+    width: 100%;
+    height: 750px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 5;
+}
+
+/* ------------------------------------
+PROYECTO INTEGRADOR (CENTRO)
+------------------------------------ */
+.central-item {
+    position: absolute;
+    width: 230px;
+    height: 230px;
+    border-radius: 50%;
+    background: radial-gradient(circle, #4ac0ff 0%, #0c0fac 90%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #f7f2f2;
+    text-align: center;
+    font-weight: bold;
+    font-size: 22px;
+
+    box-shadow:
+        0 0 35px rgba(255, 210, 170, .9),
+        0 0 80px rgba(255, 160, 110, .7),
+        inset 0 0 30px rgba(255, 210, 170, .5);
+    transition: .3s;
+    z-index: 10;
+}
+
+.central-item:hover {
+    transform: scale(1.1);
+    box-shadow:
+        0 0 50px rgba(255, 220, 180, 1),
+        0 0 120px rgba(255, 160, 120, 1),
+        inset 0 0 35px rgba(255, 220, 180, .7);
+}
+
+/* ------------------------------------
+ÓRBITA
+------------------------------------ */
+.orbit {
+    position: absolute;
+    width: 620px;
+    height: 620px;
+    border-radius: 50%;
+    animation: spin 18s linear infinite;
+}
+
+.orbit::before {
+    content: "";
+    position: absolute;
+    width: 620px;
+    height: 620px;
+    border-radius: 50%;
+    border: 3px solid rgba(255, 255, 255, 0.23);
+}
+
+.orbit::after {
+    content: "";
+    position: absolute;
+    width: 700px;
+    height: 700px;
+    border-radius: 50%;
+    border: 2px dashed rgba(255, 200, 160, .35);
+    top: -40px;
+    left: -40px;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* ------------------------------------
+UNIDADES EN ORBITA
+------------------------------------ */
+.orbit-item {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background: radial-gradient(circle, #f8d6b5 0%, #bfa17b 90%);
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+
+    transition: .3s;
+    box-shadow: inset 0 0 12px rgba(255, 255, 255, .4);
+
+    /* ✔️ Animación de brillo */
+    animation: brilloSuave 3s ease-in-out infinite;
+}
+
+/* 🔧 FIX — expansión visible */
+.orbit-item:hover {
+    transform: scale(1.18);
+    box-shadow:
+        0 0 55px rgba(255, 220, 180, 1),
+        0 0 95px rgba(255, 180, 120, .9),
+        inset 0 0 25px rgba(255, 255, 255, .55);
+}
+
+/* POSICIONES */
+.orbit-item:nth-child(1) {
+    top: -5%;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.orbit-item:nth-child(2) {
+    top: 50%;
+    left: 102%;
+    transform: translate(-100%, -50%);
+}
+
+.orbit-item:nth-child(3) {
+    top: 102%;
+    left: 50%;
+    transform: translate(-50%, -100%);
+}
+
+.orbit-item:nth-child(4) {
+    top: 50%;
+    left: -2%;
+    transform: translate(0, -50%);
+}
+
+/* ------------------------------------
+RESPONSIVE DESIGN
+------------------------------------ */
+@media (max-width: 900px) {
+    .orbit {
+        width: 480px;
+        height: 480px;
+    }
+
+    .orbit::before {
+        width: 480px;
+        height: 480px;
+    }
+
+    .orbit::after {
+        width: 540px;
+        height: 540px;
+        top: -30px;
+        left: -30px;
+    }
+
+    .orbit-item {
+        width: 120px;
+        height: 120px;
+        font-size: 14px;
+    }
+
+    .central-item {
+        width: 180px;
+        height: 180px;
+        font-size: 18px;
+    }
+}
+
+/* CELULAR */
+@media (max-width: 480px) {
+
+    #conocer-mas {
+        height: 130vh;
+    }
+
+    .orbit {
+        width: 320px;
+        height: 320px;
+    }
+
+    .orbit::before {
+        width: 320px;
+        height: 320px;
+    }
+
+    .orbit::after {
+        width: 370px;
+        height: 370px;
+        top: -25px;
+        left: -25px;
+    }
+
+    .central-item {
+        width: 140px;
+        height: 140px;
+        font-size: 14px;
+    }
+
+    .orbit-item {
+        width: 90px;
+        height: 90px;
+        font-size: 11px;
+    }
+}
+
+/* Quitar outlines */
+.orbit-item,
+.orbit-item *,
+.central-item,
+.central-item * {
+    outline: none !important;
+    border: none !important;
+    -webkit-tap-highlight-color: transparent !important;
+    user-select: none !important;
+}
+
+.orbit-item:focus,
+.orbit-item:active,
+.orbit-item:focus-visible {
+    outline: none !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+/* ------------------------------------
+Animación Bridgerton suavizada (NO tapa el hover)
+------------------------------------ */
+@keyframes brilloSuave {
+
+    0%,
+    100% {
+        box-shadow:
+            0 0 6px rgba(17, 170, 252, 0.4),
+            0 0 15px rgba(7, 182, 185, 0.25),
+            inset 0 0 10px rgba(10, 185, 238, 0.35);
+    }
+
+    50% {
+        box-shadow:
+            0 0 12px rgba(255, 230, 200, .7),
+            0 0 30px rgba(255, 190, 140, .55),
+            inset 0 0 14px rgba(255, 255, 255, .4);
+    }
+}
+
+
+/* Cuando pasas el cursor */
+.orbit-item:hover {
+    transform: scale(1.35);
+    /* ⭐ Se expande */
+    filter: brightness(1.8);
+    /* ⭐ Brilla más */
+}
+
+/* ===========================
+   AJUSTES VISUALES EXTRA
+   (NO modifica el código base)
+=========================== */
+
+/* 🔵 — Hacer esferas más visibles, con borde suave */
+.orbit-item {
+    border: 3px solid rgba(0, 123, 255, 0.45) !important;
+    /* Borde más visible */
+    backdrop-filter: blur(6px) !important;
+    /* Más efecto vidrio */
+    transform: scale(1.08);
+    /* Un pelín más grandes */
+}
+
+/* ⭐ Hover — expansión estilo botón + brillo más fuerte */
+.orbit-item:hover {
+    transform: scale(1.32) !important;
+    box-shadow:
+        0 0 65px rgb(52, 148, 180),
+        0 0 120px rgba(115, 222, 244, 0.85),
+        inset 0 0 35px rgba(16, 143, 255, 0.65) !important;
+    filter: brightness(2) !important;
+}
+
+/* 🟠 — Hacer el Proyecto Integrador un poco más grande y con borde suave */
+.central-item {
+    transform: scale(1.12);
+    /* Más grande */
+    border: 4px solid rgba(69, 170, 216, 0.35);
+    /* Contorno visible */
+    backdrop-filter: blur(4px);
+    /* Sutil vidrio */
+}
+
+/* ⭐ Hover del centro — expansión ligera tipo “botón” */
+.central-item:hover {
+    transform: scale(1.24);
+    box-shadow:
+        0 0 80px rgb(36, 165, 152),
+        0 0 145px rgba(26, 99, 107, 0.95),
+        inset 0 0 40px rgba(1, 191, 230, 0.75);
+}
+
+/* ===========================
+   OVERRIDES: transparencia, hover y efecto en órbita
+   Pegar al final del archivo (NO modifica tu base)
+=========================== */
+
+/* 1) Forzar fondo translúcido tipo vidrio y mantener gradiente suave */
+.orbit-item {
+    /* gradiente con alpha para transparencia */
+    background: radial-gradient(circle,
+            rgba(35, 34, 34, 0) 0%,
+            rgba(20, 120, 140, 0.18) 55%,
+            rgba(10, 60, 80, 0.22) 100%) !important;
+
+    /* borde sutil para definir la forma */
+    border: 2px solid rgba(255, 255, 255, 0.18) !important;
+
+    /* efecto vidrio: difumina lo que queda detrás */
+    backdrop-filter: blur(6px) saturate(120%) !important;
+
+    /* sombra interior ligera (como ya tenías) */
+    box-shadow: inset 0 0 12px rgba(255, 255, 255, 0.25) !important;
+
+    /* un pelín más grande por defecto (manteniendo órbita) */
+    transform: scale(1.06) !important;
+
+    /* suavizar cambios */
+    transition: transform .28s cubic-bezier(.2, .9, .3, 1),
+        box-shadow .28s,
+        filter .28s,
+        background .28s;
+}
+
+/* 2) Hover de las esferas: color más intenso, más brillo y expansión tipo botón */
+.orbit-item:hover {
+    transform: scale(1.32) !important;
+    /* expansión visible pero controlada */
+    filter: brightness(1.8) saturate(120%) !important;
+
+    /* background más tintado (tonalidad "azul-verde" intensa) */
+    background: radial-gradient(circle,
+            rgba(255, 255, 255, 0.08) 0%,
+            rgba(40, 180, 210, 0.32) 45%,
+            rgba(12, 110, 150, 0.42) 100%) !important;
+
+    box-shadow:
+        0 0 70px rgba(40, 180, 210, 0.30),
+        0 0 120px rgba(10, 130, 160, 0.22),
+        inset 0 0 30px rgba(255, 255, 255, 0.55) !important;
+}
+
+/* 3) Hacer central-item ligeramente translúcido y un poco más grande (sin romper tu base) */
+.central-item {
+    /* gradiente semitransparente: mantiene forma pero deja ver el fondo */
+    background: radial-gradient(circle,
+            rgba(65, 142, 149, 0.88) 0%,
+            rgba(79, 168, 196, 0.75) 90%) !important;
+
+    /* borde claro para delimitarlo sobre el fondo */
+    border: 3px solid rgba(255, 255, 255, 0.12) !important;
+
+    /* ligero aumento por defecto */
+    transform: scale(1.08) !important;
+    transition: transform .25s, box-shadow .25s, background .25s;
+}
+
+/* Hover del central */
+.central-item:hover {
+    transform: scale(1.22) !important;
+    box-shadow:
+        0 0 95px rgba(6, 75, 149, 0.95),
+        0 0 160px rgba(39, 177, 180, 0.95),
+        inset 0 0 45px rgba(0, 194, 242, 0.65) !important;
+}
+
+/* 4) Cambiar look de las órbitas (pseudo elementos) cuando una esfera esté en hover.
+     Usamos :has() cuando está disponible y un fallback .orbit:hover para compatibilidad.
+*/
+
+/* --- A: efecto cuando el cursor está sobre cualquier parte de la órbita (fallback) --- */
+.orbit:hover::before,
+.orbit:hover::after {
+    border-color: rgba(40, 180, 210, 0.45) !important;
+    /* color más visible */
+    box-shadow: 0 0 30px rgba(40, 180, 210, 0.12);
+}
+
+/* --- B: efecto más específico: cuando UNA esfera interna está en hover (mejor UX) --- */
+/* Uso de :has() — funciona en navegadores modernos (Chrome/Edge/Safari recientes) */
+@supports(selector(:has(.orbit-item:hover))) {
+
+    .orbit:has(.orbit-item:hover)::before,
+    .orbit:has(.orbit-item:hover)::after {
+        border-color: rgba(40, 190, 230, 0.60) !important;
+        box-shadow: 0 0 42px rgba(40, 190, 230, 0.18);
+        transform: scale(1.01);
+        /* sutil pop del anillo */
+        transition: border-color .18s, box-shadow .18s, transform .18s;
+    }
+}
+
+/* 5) Ajustes responsive: si cambias tamaños en @media anteriores, mantenemos proporciones */
+@media (max-width:900px) {
+    .orbit-item {
+        transform: scale(1.02) !important;
+    }
+
+    .orbit-item:hover {
+        transform: scale(1.22) !important;
+    }
+
+    .central-item {
+        transform: scale(1.06) !important;
+    }
+}
+
+/* 6) Accesibilidad: focus keyboard (si alguien navega con teclado) */
+.orbit-item:focus-visible {
+    outline: 2px solid rgba(40, 180, 210, 0.55) !important;
+    transform: scale(1.28) !important;
+}
+
+/* 7) Si algún estilo no se aplica por especificidad en el original,
+   usamos !important (mínimo) para asegurar que tus overrides se vean */
+
+/* =======================================
+   FIX #1 — MÁS ESPACIO ENTRE EL TEXTO Y LA ÓRBITA
+======================================= */
+.conocer-texto {
+    margin-bottom: 80px !important;
+}
+
+/* =======================================
+   FIX #2 — HACER LA ROTACIÓN PERFECTAMENTE SIMÉTRICA
+   (Distribuye automáticamente 4 elementos en 360°)
+======================================= */
+.sistema-orbital .orbit-item {
+    position: absolute !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform-origin: -180px center !important;
+    /* Ajusta la distancia radial */
+}
+
+.sistema-orbital .orbit-item:nth-child(1) {
+    transform: rotate(0deg) translateX(180px);
+}
+
+.sistema-orbital .orbit-item:nth-child(2) {
+    transform: rotate(90deg) translateX(180px);
+}
+
+.sistema-orbital .orbit-item:nth-child(3) {
+    transform: rotate(180deg) translateX(180px);
+}
+
+.sistema-orbital .orbit-item:nth-child(4) {
+    transform: rotate(270deg) translateX(180px);
+}
+
+/* =======================================
+   FIX #3 — ACTIVAR HOVER EN TODAS LAS ESFERAS
+======================================= */
+.orbit-item {
+    pointer-events: auto !important;
+    z-index: 10 !important;
+}
+
+.orbit::before,
+.orbit::after {
+    z-index: 1 !important;
+    /* se van abajo */
+}
+
+/* =======================================
+   FIX #4 — HACER TRANSPARENTE EL CENTRO
+======================================= */
+.central-item {
+    background: radial-gradient(circle,
+            rgba(255, 255, 255, 0.10) 0%,
+            rgba(255, 255, 255, 0.05) 40%,
+            rgba(255, 255, 255, 0.03) 100%) !important;
+
+    backdrop-filter: blur(10px) saturate(140%) !important;
+
+    border: 2px solid rgba(255, 255, 255, 0.18) !important;
+
+    box-shadow:
+        0 0 40px rgba(255, 255, 255, 0.15),
+        inset 0 0 25px rgba(255, 255, 255, 0.12) !important;
+}
+
+/* =======================================
+   FIX DEFINITIVO — SEPARAR LAS ESFERAS DEL CENTRO
+   Y HACER QUE QUEDEN EXACTAMENTE EN LA ÓRBITA
+======================================= */
+
+.sistema-orbital .orbit-item {
+    position: absolute !important;
+    top: 50% !important;
+    left: 50% !important;
+
+    /* DISTANCIA DEL CENTRO (RADIO REAL) */
+    /* Aumenta o reduce este valor hasta que quede perfecto */
+    --radio: 260px;
+
+    transform-origin: calc(-1 * var(--radio)) center !important;
+}
+
+/* DISTRIBUCIÓN PERFECTA EN 4 DIRECCIONES */
+.sistema-orbital .orbit-item:nth-child(1) {
+    transform: rotate(0deg) translateX(var(--radio));
+}
+
+.sistema-orbital .orbit-item:nth-child(2) {
+    transform: rotate(90deg) translateX(var(--radio));
+}
+
+.sistema-orbital .orbit-item:nth-child(3) {
+    transform: rotate(180deg) translateX(var(--radio));
+}
+
+.sistema-orbital .orbit-item:nth-child(4) {
+    transform: rotate(270deg) translateX(var(--radio));
+}
+
+/* POSICIONES ORIGINALES EXACTAS */
+.orbit-item:nth-child(1) {
+    top: -5% !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+}
+
+.orbit-item:nth-child(2) {
+    top: 50% !important;
+    left: 102% !important;
+    transform: translate(-100%, -50%) !important;
+}
+
+.orbit-item:nth-child(3) {
+    top: 102% !important;
+    left: 50% !important;
+    transform: translate(-50%, -100%) !important;
+}
+
+.orbit-item:nth-child(4) {
+    top: 50% !important;
+    left: -2% !important;
+    transform: translate(0, -50%) !important;
+}
+
+.orbit-item {
+    color: white !important;
+}
+
+.link-circulo {
+    display: inline-block;
+    text-decoration: none;
+    color: inherit;
+}

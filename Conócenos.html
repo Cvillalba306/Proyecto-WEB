@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conócenos</title>
+
+    <style>
+        /* RESET */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #000;
+            overflow-x: hidden;
+            font-family: Arial, sans-serif;
+            color: white;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* ===========================================
+           ✨ NEBLINA / SMOKE BACKGROUND (Dinámica)
+           =========================================== */
+        .fog {
+            position: fixed;
+            inset: 0;
+            background: url('imagenes/fog.png') repeat;
+            background-size: 1200px 1200px;
+            opacity: 0.18;
+            animation: fogMove 22s linear infinite;
+            z-index: -4;
+        }
+
+        @keyframes fogMove {
+            0% {
+                transform: translate(0, 0);
+            }
+
+            50% {
+                transform: translate(80px, 50px);
+            }
+
+            100% {
+                transform: translate(0, 0);
+            }
+        }
+
+        /* ===========================================
+           ✨ BACKGROUND 3D PARALLAX
+           =========================================== */
+        .background-3d {
+            position: fixed;
+            inset: 0;
+            background: url('imagenes/fondo PI.jpg') center/cover;
+            transform: translateZ(-50px) scale(1.25);
+            opacity: 0.40;
+            z-index: -3;
+        }
+
+        /* ===========================================
+           ✨ EFECTO PLEX GLOW (bordes dinámicos)
+           =========================================== */
+        .plex-glow {
+            position: fixed;
+            inset: 0;
+            background: radial-gradient(circle at 50% 50%,
+                    rgba(255, 215, 120, 0.18) 0%,
+                    transparent 60%);
+            filter: blur(120px);
+            z-index: -2;
+            animation: plexGlow 6s ease-in-out infinite alternate;
+        }
+
+        @keyframes plexGlow {
+            0% {
+                transform: scale(1);
+                opacity: 0.23;
+            }
+
+            100% {
+                transform: scale(1.4);
+                opacity: 0.35;
+            }
+        }
+
+        /* ===========================================
+           ✨ PARTICULAS DORADAS (premium)
+           =========================================== */
+        #goldParticles {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        /* ===========================================
+           ✨ CURSOR PREMIUM (Reactor + Shlower)
+           =========================================== */
+
+        .cursor-core {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: #ffd36a;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 5000;
+            pointer-events: none;
+            box-shadow: 0 0 20px #ffd36a, 0 0 35px #ffca55;
+        }
+
+        .cursor-reactor {
+            position: fixed;
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            border: 2px solid rgba(255, 210, 120, 0.5);
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            z-index: 4000;
+            animation: reactorPulse 1.6s infinite ease-in-out;
+        }
+
+        @keyframes reactorPulse {
+            0% {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: .5;
+            }
+
+            100% {
+                transform: translate(-50%, -50%) scale(1.65);
+                opacity: .1;
+            }
+        }
+
+        .cursor-tail {
+            position: fixed;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: rgba(255, 210, 100, 0.5);
+            filter: blur(14px);
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            z-index: 3000;
+        }
+
+        /* ===========================================
+           CONTENIDO + CARD GLASS
+           =========================================== */
+        .contenido {
+            width: 90%;
+            max-width: 900px;
+            margin: auto;
+            padding: 140px 0;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.14);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            border-radius: 22px;
+            padding: 40px;
+            backdrop-filter: blur(16px);
+            box-shadow: 0 0 35px rgba(0, 0, 0, 0.45);
+            animation: fadeIn 1.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1 {
+            font-size: 3rem;
+            text-shadow: 0 0 18px #ffd36a;
+            margin-bottom: 20px;
+        }
+
+        h3 {
+            margin-top: 20px;
+            font-size: 1.6rem;
+            text-shadow: 0 0 10px #ffe7b0;
+        }
+
+        p {
+            font-size: 1.3rem;
+            opacity: .9;
+            margin-bottom: 12px;
+        }
+
+        .btn-premium {
+            display: inline-block;
+            margin-top: 25px;
+            padding: 15px 28px;
+            background: rgba(255, 220, 130, 0.25);
+            border: 2px solid rgba(255, 220, 130, 0.6);
+            border-radius: 16px;
+            color: #fff5d5;
+            text-decoration: none;
+            font-weight: bold;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 0 22px rgba(255, 220, 130, 0.55);
+            transition: .3s ease;
+        }
+
+        .btn-premium:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 38px rgba(255, 220, 130, 0.95);
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- EFECTOS -->
+    <div class="fog"></div>
+    <div class="background-3d"></div>
+    <div class="plex-glow"></div>
+
+    <!-- CURSOR -->
+    <div class="cursor-core"></div>
+    <div class="cursor-reactor"></div>
+    <div class="cursor-tail"></div>
+
+    <!-- PARTICULAS -->
+    <canvas id="goldParticles"></canvas>
+
+    <!-- CONTENIDO -->
+    <div class="contenido">
+        <div class="card">
+            <h1>Conócenos</h1>
+
+            <h3>Nombre Completo</h3>
+            <p>Daniel Odilo Gregorio</p>
+
+            <h3>Escuela</h3>
+            <p>Escuela Normal Roberto Solís Quiroga</p>
+
+            <h3>Teléfono</h3>
+            <p>X</p>
+
+            <h3>Correo Electrónico</h3>
+            <p>X</p>
+
+            <a href="Inicio.html" class="btn-premium">⬅ Volver al Inicio</a>
+        </div>
+    </div>
+
+    <!-- ===========================================
+         JS – CURSOR (Reactor + Shlower)
+         =========================================== -->
+    <script>
+        const core = document.querySelector(".cursor-core");
+        const reactor = document.querySelector(".cursor-reactor");
+        const tail = document.querySelector(".cursor-tail");
+
+        window.addEventListener("mousemove", e => {
+            core.style.left = e.clientX + "px";
+            core.style.top = e.clientY + "px";
+
+            reactor.style.left = e.clientX + "px";
+            reactor.style.top = e.clientY + "px";
+
+            // Shlower tail
+            tail.style.left = e.clientX + "px";
+            tail.style.top = e.clientY + "px";
+        });
+    </script>
+
+    <!-- ===========================================
+         JS – PARTICULAS DORADAS
+         =========================================== -->
+    <script>
+        const canvas = document.getElementById("goldParticles");
+        const ctx = canvas.getContext("2d");
+
+        canvas.width = innerWidth;
+        canvas.height = innerHeight;
+
+        const particles = [];
+        for (let i = 0; i < 80; i++) {
+            particles.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                r: Math.random() * 2 + 0.8,
+                vx: (Math.random() - 0.5) * 0.7,
+                vy: (Math.random() - 0.5) * 0.7
+            });
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            particles.forEach(p => {
+                p.x += p.vx;
+                p.y += p.vy;
+
+                if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
+                if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+                ctx.fillStyle = "rgba(255,220,140,0.55)";
+                ctx.fill();
+            });
+
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+    </script>
+
+    <!-- PARALLAX -->
+    <script>
+        document.addEventListener("mousemove", e => {
+            const bg = document.querySelector(".background-3d");
+            let x = (e.clientX / window.innerWidth - 0.5) * 10;
+            let y = (e.clientY / window.innerHeight - 0.5) * 10;
+            bg.style.transform =
+                `translateZ(-50px) scale(1.25) translate(${x}px,${y}px)`;
+        });
+    </script>
+
+</body>
+
+</html>

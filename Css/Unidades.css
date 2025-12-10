@@ -1,0 +1,44 @@
+/* ===== PÁGINAS DE UNIDADES ===== */
+
+.header-unidad {
+    padding: 40px 20px;
+    text-align: center;
+    background: rgba(0, 0, 0, 0.6);
+    color: white;
+    font-size: 2rem;
+}
+
+.btn-volver {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 8px 15px;
+    background: white;
+    color: black;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: bold;
+    transition: 0.3s ease;
+}
+
+.btn-volver:hover {
+    background: #ddd;
+}
+
+.contenido-unidad {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 20px;
+}
+
+.seccion-info {
+    background: rgba(255, 255, 255, 0.15);
+    padding: 25px;
+    margin-bottom: 30px;
+    border-radius: 12px;
+    backdrop-filter: blur(3px);
+    color: white;
+}
+
+.seccion-info h2 {
+    margin-bottom: 10px;
+}
